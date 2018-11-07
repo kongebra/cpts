@@ -1,2 +1,15 @@
-# cpts
-Computer Party Ticket System
+# Computer Party Ticket System
+
+## Deployment
+
+## Configure
+
+## Testing
+
+## Running
+
+# Spec
+
+## Routes
+
+## API
