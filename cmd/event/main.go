@@ -6,9 +6,9 @@ type TimeInterval struct {
 }
 
 type Event struct {
-	Id int
-	Name string
-	Description string
-	Date TimeInterval
+	Id int `bson:"id,omitempty" json:"id"`
+	Name string `json:"name"`
+	Description string `json:"description"`
+	Date TimeInterval `json:"date"`
 }
 

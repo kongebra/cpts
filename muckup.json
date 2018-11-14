@@ -1,0 +1,66 @@
+{
+  "users": [
+    {
+      "id": 1,
+      "username": "kongebra",
+      "email": "sveindani@gmail.com",
+      "phone": "92484471",
+      "tickets": [
+        {
+          "id": 12389124,
+          "event": 1
+        },
+        {
+          "id": 2578234,
+          "event": 2
+        }
+      ]
+    },
+    {
+      "id": 2,
+      "username": "TotalBug",
+      "email": "totalbug@gmail.com",
+      "phone": "06666",
+      "tickets": [
+        1
+      ]
+    }
+  ],
+
+  "event": [
+    {
+      "id": 1,
+      "name": "HusetLAN v2018",
+      "date": {
+        "start": "",
+        "end": ""
+      },
+
+      "description": "description",
+      "seating-map": 1,
+
+      "participants": [
+        1,
+        2
+      ],
+
+      "groups": [
+        {
+          "leader": 1,
+          "numberOfTickets": 2,
+          "other": [
+
+          ]
+        }
+      ]
+    }
+  ],
+
+  "seating-maps": [
+    {
+      "id": 1,
+      "rows": 4,
+      "cols": 4
+    }
+  ]
+}

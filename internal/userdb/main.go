@@ -1,14 +1,15 @@
-package mongodb
+package userdb
 
 import (
 	"github.com/kongebra/cpts/cmd/user"
+	"github.com/kongebra/cpts/internal/mongodb"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"log"
 )
 
 type UserDB struct {
-	Database Database
+	Database mongodb.Database
 	Collection string
 }
 
@@ -87,14 +88,14 @@ func (db *UserDB) Get(id bson.ObjectId) user.User {
 	session, _ := db.Dial()
 	defer session.Close()
 
-	user := user.User{}
-	err := session.DB(db.Database.Database).C(db.Collection).Find(bson.M{"id": id}).One(&user)
+	u := user.User{}
+	err := session.DB(db.Database.Database).C(db.Collection).Find(bson.M{"id": id}).One(&u)
 
 	if err != nil {
 		log.Fatalf("Get: %s\n", err)
 	}
 
-	return user
+	return u
 }
 
 func (db *UserDB) GetAll() []user.User {
