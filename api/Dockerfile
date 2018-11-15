@@ -1,6 +1,6 @@
 FROM golang:1.11.2
 
-RUN adduser --disabled-password --gocos '' api
+RUN adduser --disabled-password --gecos '' api
 USER api
 
 # RUN go get github.com/gorilla/mux
