@@ -1,18 +1,15 @@
 FROM golang:1.11.2
 
+RUN export GOPATH=$HOME/go
+RUN export PATH=$GOPATH:$PATH
+
 RUN adduser --disabled-password --gecos '' api
 USER api
 
-# RUN go get github.com/gorilla/mux
-# RUN go get gopkg.in/mgo.v2/bson
+WORKDIR $GOPATH/src/github.com/kongebra/cpts/api
 
-RUN go get -d -v ./..
-RUN go install -v ./..
-
-RUN mkdir /app
-ADD . /app
-
-WORKDIR /app
+RUN go get github.com/gorilla/mux
+RUN go get gopkg.in/mgo.v2/bson
 
 RUN go build -o main .
 
