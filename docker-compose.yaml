@@ -1,7 +1,7 @@
 version: '3'
 services:
   app-back:
-    image: golang:1.11.2
+    image: cpts/api
     networks:
       - mongo-go
       - nginx-go
@@ -17,7 +17,7 @@ services:
       restart_policy:
         condition: on-failure
   nginx:
-    image: nginx
+    image: cpts/web
     volumes:
       - /etc/nginx/conf.d/
     ports:
@@ -35,7 +35,7 @@ services:
       restart_policy:
         condition: on-failure
   mongodb:
-    image: mongo
+    image: cpts/mongodb
     volumes:
       - mongodb-data:/data/db
     networks:
