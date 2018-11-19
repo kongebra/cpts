@@ -1,6 +1,6 @@
 version: '3'
 services:
-  api:
+  app-back:
     image: golang:1.11.2
     networks:
       - mongo-go
@@ -19,7 +19,7 @@ services:
   nginx:
     image: nginx
     volumes:
-      - /etc/nginx/conf.d
+      - /etc/nginx/conf.d/
     ports:
       - 80:80
       - 443:443
