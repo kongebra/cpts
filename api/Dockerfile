@@ -1,8 +1,7 @@
 FROM golang
 WORKDIR /go/src/github.com/kongebra/cpts
 COPY . .
-RUN set -x && \
-    go get -d -v .
+RUN go get -d -v .
 
 FROM scratch
 WORKDIR /root/
