@@ -1,0 +1,32 @@
+version: '3'
+services:
+  api:
+    container_name: 'api'
+    build: './api'
+    ports:
+      - '8080:8080'
+    volumes:
+      - './api:$GOPATH/src&github.com/kongebra/cpts/api'
+    depends_on:
+      - 'mongo'
+  web:
+    container_name: 'web'
+    ports:
+      - '80:80'
+      - '443:443'
+    volumes:
+      - './web/:/etc/nginx/conf.c/'
+    depends_on:
+      - 'api'
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+  mongo:
+    image: 'mongo:latest'
+    container_name: 'mongo'
+    ports:
+      - '27100:27017'

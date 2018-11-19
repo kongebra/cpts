@@ -1,25 +1,57 @@
 version: '3'
 services:
   api:
-    container_name: 'api'
-    build: './api'
+    image: golang:1.11.2
+    networks:
+      - mongo-go
+      - nginx-go
     ports:
-      - '8080:8080'
-    volumes:
-      - './api:$GOPATH/src&github.com/kongebra/cpts/api'
+      - 3000:3000
     depends_on:
-      - 'mongo'
-  web:
-    container_name: 'web'
-    build: './web'
-    ports:
-      - '8081:80'
+      - mongodb
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+  nginx:
+    image: nginx
     volumes:
-      - './web:/usr/share/nginx/html'
-    depends_on:
-      - 'api'
-  mongo:
-    image: 'mongo:latest'
-    container_name: 'mongo'
+      - /etc/nginx/conf.d
     ports:
-      - '27100:27017'
+      - 80:80
+      - 443:443
+    networks:
+      - nginx-go
+    depends_on:
+      - api
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+  mongodb:
+    image: mongo
+    volumes:
+      - mongodb-data:/data/db
+    networks:
+      - mongo-go
+    ports:
+      - 27017:27017
+      - 28017:28017
+    deploy:
+      replicas: 1
+      update_config:
+        parallelism: 2
+        delay: 10s
+      restart_policy:
+        condition: on-failure
+  networks:
+    mongo-go:
+    nginx-go:
+  volumes:
+    mongodb-data:
