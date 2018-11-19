@@ -1,11 +1,8 @@
-#FROM golang:onbuild
-#EXPOSE 8080
 FROM golang
 WORKDIR /go/src/github.com/kongebra/cpts
 COPY . .
 RUN set -x && \
-    go get -d -v . && \
-    CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
+    go get -d -v .
 
 FROM scratch
 WORKDIR /root/
