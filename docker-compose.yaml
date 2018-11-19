@@ -1,43 +1,27 @@
 version: '3'
 services:
-  app-back:
-    image: cpts/api
+  api:
+    container_name: api
+    build:
+      - ./api
     ports:
       - 3000:3000
     depends_on:
-      - mongodb
-    deploy:
-      replicas: 1
-      update_config:
-        parallelism: 2
-        delay: 10s
-      restart_policy:
-        condition: on-failure
-  nginx:
-    image: cpts/web
+      - mongod
+  web:
+    container_name: web
+    build:
+      - ./web
     volumes:
-      - /etc/nginx/conf.d/
+      - ./web/:/etc/nginx/conf.d/
     ports:
       - 80:80
       - 443:443
     depends_on:
-      - app-back
-    deploy:
-      replicas: 1
-      update_config:
-        parallelism: 2
-        delay: 10s
-      restart_policy:
-        condition: on-failure
-  mongodb:
-    image: cpts/mongodb
+      - api
+  mongo:
+    image: mongo:latest
+    container_name: mongo
     ports:
       - 27017:27017
       - 28017:28017
-    deploy:
-      replicas: 1
-      update_config:
-        parallelism: 2
-        delay: 10s
-      restart_policy:
-        condition: on-failure
