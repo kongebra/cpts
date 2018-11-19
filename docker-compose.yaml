@@ -36,8 +36,6 @@ services:
         condition: on-failure
   mongodb:
     image: cpts/mongodb
-    volumes:
-      - mongodb-data:/data/db
     networks:
       - mongo-go
     ports:
