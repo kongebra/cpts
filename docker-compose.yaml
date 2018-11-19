@@ -26,7 +26,7 @@ services:
     networks:
       - nginx-go
     depends_on:
-      - api
+      - app-back
     deploy:
       replicas: 1
       update_config:
