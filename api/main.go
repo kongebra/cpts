@@ -2,6 +2,7 @@ package main
 
 import (
 	"encoding/json"
+	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/kongebra/cpts/api/cpts"
 	"github.com/kongebra/cpts/api/user"
@@ -13,6 +14,10 @@ import (
 
 func main() {
 	router := mux.NewRouter().StrictSlash(true)
+
+	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprintln(w, "Hello from Golang!")
+	})
 
 	router.HandleFunc("/api/", func(w http.ResponseWriter, r *http.Request) {
 		var api cpts.CPTS
@@ -35,7 +40,7 @@ func GetPort() string {
 	var port = os.Getenv("PORT")
 
 	if port == "" {
-		port = "8081"
+		port = "8080"
 	}
 
 	return ":" + port
