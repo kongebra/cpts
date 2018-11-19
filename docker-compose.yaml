@@ -2,9 +2,6 @@ version: '3'
 services:
   app-back:
     image: cpts/api
-    networks:
-      - mongo-go
-      - nginx-go
     ports:
       - 3000:3000
     depends_on:
@@ -23,8 +20,6 @@ services:
     ports:
       - 80:80
       - 443:443
-    networks:
-      - nginx-go
     depends_on:
       - app-back
     deploy:
@@ -36,8 +31,6 @@ services:
         condition: on-failure
   mongodb:
     image: cpts/mongodb
-    networks:
-      - mongo-go
     ports:
       - 27017:27017
       - 28017:28017
