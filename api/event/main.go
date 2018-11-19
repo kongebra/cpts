@@ -19,9 +19,7 @@ type Event struct {
 	Participants []bson.ObjectId `json:"participants"`
 }
 
-func main(){
-	r := mux.NewRouter()
-
+func MakeEventRoutes(r *mux.Router){
 	r.HandleFunc("/api/events/", getEvents).Methods("GET")
 	r.HandleFunc("/api/events/{id}", getEvent).Methods("GET")
 	r.HandleFunc("/api/events", createEvent).Methods("POST")
