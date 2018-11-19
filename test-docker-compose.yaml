@@ -4,17 +4,17 @@ services:
     build: ./api
     image: cpts/api
     ports:
-    - 3000:3000
+      - 3000:3000
     depends_on:
-    - mongo
+      - mongo
   nginx:
     build: ./web
     image: cpts/web
     ports:
-    - 80:80
+      - 80:80
     depends_on:
-    - api
+      - api
   mongo:
     image: mongo:latest
     ports:
-    - 27017:27017
+      - 27017:27017
