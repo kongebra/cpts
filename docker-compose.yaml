@@ -1,20 +1,28 @@
 version: '3'
 services:
   api:
+    image: golang:onbuild
+    container_name: api
     build: ./api
-    image: cpts/api
     ports:
-    - 3000:3000
+      - 3000:3000
+    volumes:
+      - .:/api
     depends_on:
-    - mongo
-  nginx:
+      - mongo
+  web:
+    image: nginx
+    container_name: web
     build: ./web
-    image: cpts/web
     ports:
-    - 80:80
+      - 80:80
+      - 443:443
+    volumes:
+      - .:/web
     depends_on:
-    - api
+      - api
   mongo:
     image: mongo:latest
+    container_name: mongo
     ports:
-    - 27017:27017
+      - 27017:27017
