@@ -1,17 +1,14 @@
-FROM golang:onbuild
-EXPOSE 8080
+#FROM golang:onbuild
+#EXPOSE 8080
+FROM golang
+WORKDIR /go/src/github.com/kongebra/cpts
+COPY . .
+RUN set -x && \
+    go get -d -v . && \
+    CGO_ENABLED=0 GOOS=linux go build -a -installsuffix cgo -o app .
 
-#FROM golang:1.11.2
-#
-#RUN adduser --disabled-password --gecos '' api
-#USER api
-#
-#RUN go get github.com/gorilla/mux
-#RUN go get gopkg.in/mgo.v2/bson
-#
-#RUN mkdir /app
-#ADD . /app
-#
-#RUN go build -o main .
-#
-#CMD ["./main"]
+FROM scratch
+WORKDIR /root/
+COPY --from=0 /go/src/github.com/kongebra/cpts .
+EXPOSE 3000
+CMD ["./cpts"]
