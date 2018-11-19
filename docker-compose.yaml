@@ -50,8 +50,3 @@ services:
         delay: 10s
       restart_policy:
         condition: on-failure
-  networks:
-    mongo-go:
-    nginx-go:
-  volumes:
-    mongodb-data:
