@@ -1,35 +1,39 @@
 package cpts
 
 import (
+	"fmt"
 	"github.com/gorilla/mux"
 	"github.com/kongebra/cpts/api/event"
 	"github.com/kongebra/cpts/api/middleware"
-	"github.com/kongebra/cpts/api/user"
+	"gopkg.in/mgo.v2"
 	"net/http"
+	"time"
 )
 
-type CPTS struct {
-	Users []user.User `json:"users"`
-}
-
-func (api *CPTS) AddUser(u user.User) {
-	api.Users = append(api.Users, u)
-}
+var (
+	ADDRS = []string{"ds133533.mlab.com:33533"}
+	DATABASE = "assidnment-2"
+	USERNAME = "cpts"
+	PASSWORD = "cpts123"
+)
 
 func RouterManager(r *mux.Router) {
-	var events = make([]event.Event, 0)
+	var dialInfo = &mgo.DialInfo{
+		Addrs: ADDRS,
+		Database: DATABASE,
+		Username: USERNAME,
+		Password: PASSWORD,
+		Timeout: 60 * time.Second,
+	}
 
 	r.Use(middleware.Logger)
 
 	r.HandleFunc("/api", func(writer http.ResponseWriter, request *http.Request) {
-
-	})
-
-	r.HandleFunc("/api/event", func(writer http.ResponseWriter, request *http.Request) {
-
-	})
+		fmt.Fprintln(writer,"/API")
+	}).Methods("GET")
 
 	r.HandleFunc("/api/event", func(writer http.ResponseWriter, request *http.Request) {
-		event.Create(writer, request, events)
+		fmt.Println("Hello")
+		event.Create(writer, request, dialInfo)
 	}).Methods("POST")
 }
