@@ -13,7 +13,7 @@ type Session struct {
 NewSession creates a new session with the database
  */
 func NewSession(url string) (*Session, error) {
-	session, err := mgo.Dial("localhost:27017")
+	session, err := mgo.Dial(url)
 
 	if err != nil {
 		return nil, err

@@ -4,6 +4,8 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"github.com/kongebra/cpts/api/middleware"
+	"github.com/kongebra/cpts/api/util"
 	"log"
 	"net/http"
 	"time"
@@ -31,11 +33,12 @@ type CPTS struct {
 
 func (api *CPTS) Init() {
 	api.Router = mux.NewRouter().StrictSlash(true)
+	api.Router.Use(middleware.Logger)
 	api.loadFromDB()
 	api.registerRoutes()
 
 	var err error
-	api.Session, err = mongo.NewSession("localhost:27017")
+	api.Session, err = mongo.NewSession(util.GetMongoURL())
 
 	if err != nil {
 		panic(err)

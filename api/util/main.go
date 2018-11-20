@@ -14,3 +14,16 @@ func GetPort() string {
 
 	return ":" + port
 }
+
+/*
+GetMongoURL checks if the system environment url is set, if not set's url to localhost:27017
+ */
+func GetMongoURL() string {
+	var url = os.Getenv("MONGO_URL")
+
+	if url == "" {
+		url = "localhost:27017"
+	}
+
+	return url
+}
