@@ -2,20 +2,21 @@ package ticket
 
 import (
 	"encoding/json"
+	"net/http"
+	"time"
+
 	"github.com/gorilla/mux"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
-	"net/http"
-	"time"
 )
 
 type Ticket struct {
-	Id bson.ObjectId `json:"id" bson:"id"`
-	Event bson.ObjectId `json:"event" bson:"event"`
-	Scanned bool `json:"scanned"`
+	Id      bson.ObjectId `json:"id" bson:"id"`
+	Event   bson.ObjectId `json:"event" bson:"event"`
+	Scanned bool          `json:"scanned"`
 }
 
-func main(){
+func main() {
 	// MongoDB mLab connection
 
 	dialInfo := &mgo.DialInfo{
@@ -32,7 +33,6 @@ func main(){
 		panic(err)
 	}
 
-
 	// Router
 	r := mux.NewRouter()
 
@@ -44,14 +44,12 @@ func main(){
 }
 
 // Get all tickets
-func (u *Ticket) getTickets(w http.ResponseWriter, r *http.Request){
-	w.Header().Set("Content-Type","application/json")
+func (u *Ticket) getTickets(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Content-Type", "application/json")
 	//TODO Get all Tickets from DB
 
-
-	json.NewEncoder(w).Encode(/* data  */)
+	json.NewEncoder(w).Encode( /* data  */ )
 }
-
 
 // Get ticket by param "id"
 func (u *Ticket) getTicket(w http.ResponseWriter, r *http.Request) {
@@ -81,6 +79,5 @@ func (u *Ticket) createTicket(w http.ResponseWriter, r *http.Request) {
 	ticket.Id = bson.NewObjectId()
 
 	//TODO Add ticket to DB
-
 
 }
