@@ -1,7 +1,6 @@
 package main
 
 import (
-	"github.com/kongebra/cpts/api/util"
 	"log"
 	"net/http"
 
@@ -12,5 +11,5 @@ func main() {
 	app := cpts.CPTS{}
 	app.Init()
 
-	log.Fatal(http.ListenAndServe(util.GetPort(), app.Router))
+	log.Fatal(http.ListenAndServe(":8080", app.Router))
 }

@@ -3,9 +3,9 @@ package event
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"net/http"
 
-	"github.com/gorilla/schema"
 	"github.com/kongebra/cpts/api/ticket"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
@@ -37,16 +37,20 @@ func Index() mgo.Index {
 
 func AddEventHandler(w http.ResponseWriter, r *http.Request, service *Service) (Event, error) {
 	var evt Event
-
+	fmt.Println(r.Header.Get("Content-Type"))
 	// form data
 	switch r.Header.Get("Content-Type") {
-	case "multipart/form-data":
-		r.ParseForm()
+	case "application/x-www-form-urlencoded":
+		/*r.ParseForm()
 		formErr := schema.NewDecoder().Decode(&evt, r.PostForm)
 		if formErr != nil {
 			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)
 			return Event{}, formErr
-		}
+		}*/
+		evt.Name = r.FormValue("name")
+		evt.Description = r.FormValue("description")
+		evt.Date = TimeInterval{Start: r.FormValue("date_start"), End: r.FormValue("date_end")}
+		evt.IMGURL = r.FormValue("image")
 	// json data
 	case "application/json":
 		decodeErr := json.NewDecoder(r.Body).Decode(&evt)
