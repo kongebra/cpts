@@ -1,16 +1,17 @@
 package cpts
 
 import (
-	"bytes"
-	"encoding/json"
 	"fmt"
+	"github.com/kongebra/cpts/api/mongo"
+	"github.com/kongebra/cpts/api/ticket"
+	"log"
 	"net/http"
 	"time"
 
 	"github.com/gorilla/mux"
 	"github.com/kongebra/cpts/api/event"
 	"github.com/kongebra/cpts/api/user"
-	mgo "gopkg.in/mgo.v2"
+	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -19,12 +20,25 @@ type CPTS struct {
 	Events   []event.Event
 	Webhooks []event.Webhook
 	Router   *mux.Router
+	Session  *mongo.Session
+	EventService *event.Service
+	TicketService *ticket.Service
+	UserService *user.Service
 }
 
 func (api *CPTS) Init() {
 	api.Router = mux.NewRouter().StrictSlash(true)
 	api.loadFromDB()
 	api.registerRoutes()
+
+	var err error
+	api.Session, err = mongo.NewSession("localhost:27017")
+
+	if err != nil {
+		panic(err)
+	}
+
+	api.EventService = event.NewEventService(api.Session, "cpts", "event")
 }
 
 func (api *CPTS) AddUser(u user.User) {
@@ -32,12 +46,30 @@ func (api *CPTS) AddUser(u user.User) {
 }
 
 func (api *CPTS) registerRoutes() {
-	//var events = make([]event.Event, 0)
+
+	api.Router.HandleFunc("/api/event/new", func(w http.ResponseWriter, r *http.Request) {
+		event := event.Event{
+			Id: bson.NewObjectId(),
+			Name: r.FormValue("name"),
+			Description: r.FormValue("description"),
+			Date: event.TimeInterval{
+				Start: r.FormValue("date_start"),
+				End: r.FormValue("date_end"),
+			},
+		}
+
+		err := api.EventService.Create(&event)
+
+		if err != nil {
+			log.Fatal("Could not create event")
+		}
+	}).Methods("POST")
 
 	api.Router.HandleFunc("/api", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "hei")
 	})
 
+	/*
 	api.Router.HandleFunc("/api/event", func(w http.ResponseWriter, r *http.Request) {
 		evt, err := event.Create(w, r)
 		if err == nil {
@@ -60,12 +92,14 @@ func (api *CPTS) registerRoutes() {
 		}
 	}).Methods("POST")
 
+	*/
 	api.Router.HandleFunc("/api/event/webhooks", func(w http.ResponseWriter, r *http.Request) {
 		wh, err := event.RegisterWebhook(w, r)
 		if err == nil {
 			api.Webhooks = append(api.Webhooks, wh)
 		}
 	}).Methods("POST")
+
 }
 
 func (api *CPTS) loadFromDB() {
