@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
+
+    <title>CPTS - EVENT</title>
+</head>
+<body>
+
+<div class="container py-5">
+    <div class="row">
+
+        <div class="col">
+            <form action="localhost:3000/api/event" method="post">
+                <h1 class="display-4">Create Event</h1>
+                <div class="form-group">
+                    <label for="">Name</label>
+                    <input type="text" class="form-control">
+                </div>
+                <div class="form-group">
+                    <label for="">Description</label>
+                    <textarea name="" id="" rows="5" class="form-control"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="">Date</label>
+                    <div class="row">
+                        <div class="col">
+                            <input type="date" class="form-control">
+                            <small class="form-text text-muted">Start</small>
+                        </div>
+                        <div class="col">
+                            <input type="date" class="form-control">
+                            <small class="form-text text-muted">End</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <label for="">Time</label>
+                    <div class="row">
+                        <div class="col">
+                            <input type="time" class="form-control">
+                            <small class="form-text text-muted">Start</small>
+                        </div>
+                        <div class="col">
+                            <input type="time" class="form-control">
+                            <small class="form-text text-muted">End</small>
+                        </div>
+                    </div>
+                </div>
+                <div class="form-group">
+                    <input type="submit" class="btn btn-outline-dark">
+                </div>
+            </form>
+        </div>
+
+    </div>
+</div>
+
+<!-- Optional JavaScript -->
+<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+<script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js" integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
+</body>
+</html>
