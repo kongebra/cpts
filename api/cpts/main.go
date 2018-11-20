@@ -5,7 +5,6 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/kongebra/cpts/api/middleware"
-	"github.com/kongebra/cpts/api/util"
 	"log"
 	"net/http"
 	"time"
@@ -38,7 +37,7 @@ func (api *CPTS) Init() {
 	api.registerRoutes()
 
 	var err error
-	api.Session, err = mongo.NewSession(util.GetMongoURL())
+	api.Session, err = mongo.NewSession("ds143532.mlab.com:43532")
 
 	if err != nil {
 		panic(err)

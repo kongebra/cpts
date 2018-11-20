@@ -1,4 +1,4 @@
-### Live application can be found at http://
+### Live application can be found at http://10.212.138.218:3000 (API) & http://10.212.138.218
 
 
 # Computer Party Ticket System
