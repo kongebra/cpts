@@ -1,12 +1,6 @@
 package ticket
 
 import (
-	"encoding/json"
-	"net/http"
-	"time"
-
-	"github.com/gorilla/mux"
-	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
 
@@ -16,6 +10,7 @@ type Ticket struct {
 	Scanned bool          `json:"scanned"`
 }
 
+/*
 func main() {
 	// MongoDB mLab connection
 
@@ -48,7 +43,7 @@ func (u *Ticket) getTickets(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	//TODO Get all Tickets from DB
 
-	json.NewEncoder(w).Encode( /* data  */ )
+	json.NewEncoder(w).Encode()
 }
 
 // Get ticket by param "id"
@@ -81,3 +76,4 @@ func (u *Ticket) createTicket(w http.ResponseWriter, r *http.Request) {
 	//TODO Add ticket to DB
 
 }
+*/

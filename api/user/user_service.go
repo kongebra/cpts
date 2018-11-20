@@ -1,9 +1,7 @@
 package user
 
 import (
-	"github.com/kongebra/cpts/api/event"
 	"github.com/kongebra/cpts/api/mongo"
-	"github.com/kongebra/cpts/api/ticket"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 )
@@ -26,6 +24,12 @@ func (s *Service) Create(u *User) error {
 	return s.Collection.Insert(u)
 }
 
+func (s *Service) GetAll() (*[]User, error) {
+	all := make([]User, 0)
+	err := s.Collection.Find(nil).All(&all)
+	return &all, err
+}
+
 func (s *Service) GetByUsername(username string) (*User, error) {
 	user := User{}
 	err := s.Collection.Find(bson.M{"username": username}).One(&user)
@@ -36,8 +40,4 @@ func (s *Service) GetByID(id bson.ObjectId) (*User, error) {
 	user := User{}
 	err := s.Collection.Find(bson.M{"_id": id}).One(&user)
 	return &user, err
-}
-
-func (s *Service) BuyTicket(e event.Service) (*ticket.Ticket, error) {
-	return nil, nil
 }
