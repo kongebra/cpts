@@ -24,23 +24,103 @@ Configure docker-compose.yaml if another version of Golang, MongoDB or Nginx is 
 
 Also the Dockerfile's in /api, /web folders.
 
-## Testing
-
-
-
-## Running
-
-# Spec
-
-## Routes
+## Web
+### URL
+####Event
+* http://10.212.138.218/event/index.html
+* http://10.212.138.218/event/create.html
+####User
+ * http://10.212.138.218/user/index.html
+ * http://10.212.138.218/user/create.html
+####Ticket
+* http://10.212.138.218/ticket/index.html
+* http://10.212.138.218/ticket/create.html
 
 
 ## API
-
-### GET /api
+###Base URL
+http://10.212.138.218:3000
 
 ### GET /api/event
+Displays all current events
 
+Response:
+```json
+[
+  {
+    "id": <value>,
+    "name": <value>,
+    "description": <value>,
+    "date": {
+      "start": <value>,
+      "end": <value>
+    },
+    "participants": [],
+    "img_url": <value>
+  }
+]
+```
 ### POST /api/event
+Creates new event
 
-### DELETE /api/event
+Body:
+```json
+{
+  "name": <value>,
+  "description": <value>,
+  "date": {
+    "start": <value>,
+    "end": <value>
+  },
+  "image": <value>
+}
+```
+
+### GET /api/user
+Display all current users
+
+Response:
+```json
+[
+  {
+    "id": <value>,
+    "username": <value>,
+    "email": <value>,
+    "tickets": []
+  }
+]
+```
+### POST /api/user
+Creates user
+
+Body:
+```json
+{
+  "username": <value>,
+  "email": <value>,
+  "password": <value>
+}
+```
+### GET /api/ticket
+Displays all tickets
+
+Response:
+```json
+[
+  {
+    "id": <value>,
+    "event": <value>,
+    "scanned": <value>
+  }
+]
+```
+### POST /api/ticket
+Creates a ticket for an user to an event
+
+Body:
+```json
+{
+  "event": <value>,
+  "user": <value>
+}
+```
