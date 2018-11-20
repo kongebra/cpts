@@ -1,8 +1,8 @@
 package main
 
 import (
-	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/kongebra/cpts/api/cpts"
 	"github.com/kongebra/cpts/api/util"
 	"log"
 	"net/http"
@@ -11,9 +11,7 @@ import (
 func main() {
 	router := mux.NewRouter().StrictSlash(true)
 
-	router.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprintln(w, "Hello from Golang!")
-	})
+	cpts.RouterManager(router)
 
 	log.Fatal(http.ListenAndServe(util.GetPort(), router))
 }

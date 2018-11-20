@@ -4,6 +4,7 @@ import (
 	"github.com/gorilla/mux"
 	"github.com/kongebra/cpts/api/ticket"
 	"gopkg.in/mgo.v2/bson"
+	"net/http"
 )
 
 type TimeInterval struct {
@@ -19,14 +20,46 @@ type Event struct {
 	Participants []bson.ObjectId `json:"participants"`
 }
 
-func main(){
-	r := mux.NewRouter()
+func Create(w http.ResponseWriter, r *http.Request, events []Event) {
+	e := Event{
+		Id: bson.NewObjectId(),
+		Name: "Some random name",
+		Description: "Some bad description",
+		Date: TimeInterval{
+			Start: "2017-11-20T00:00:00Z",
+			End: "2017-11-20T12:00:00Z",
+		},
+	}
 
+	events = append(events, e)
+}
+
+func MakeEventRoutes(r *mux.Router) {
 	r.HandleFunc("/api/events/", getEvents).Methods("GET")
 	r.HandleFunc("/api/events/{id}", getEvent).Methods("GET")
 	r.HandleFunc("/api/events", createEvent).Methods("POST")
 	r.HandleFunc("/api/events/{id}", updateEvents).Methods("PUT")
 	r.HandleFunc("/api/events/{id}", deleteEvents).Methods("DELETE")
+}
+
+func getEvents(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func getEvent(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func createEvent(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func updateEvents(w http.ResponseWriter, r *http.Request) {
+
+}
+
+func deleteEvents(w	http.ResponseWriter, r *http.Request) {
+
 }
 
 func (e *Event) CreateTicket() ticket.Ticket {
