@@ -24,10 +24,10 @@ func (s *Service) Create(u *User) error {
 	return s.Collection.Insert(u)
 }
 
-func (s *Service) GetAll() (*[]User, error) {
+func (s *Service) GetAll() ([]User, error) {
 	all := make([]User, 0)
 	err := s.Collection.Find(nil).All(&all)
-	return &all, err
+	return all, err
 }
 
 func (s *Service) GetByUsername(username string) (*User, error) {

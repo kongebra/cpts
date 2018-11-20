@@ -20,10 +20,10 @@ func (s *Service) Create(e *Event) error {
 	return s.Collection.Insert(e)
 }
 
-func (s *Service) GetAll() (*[]Event, error) {
+func (s *Service) GetAll() ([]Event, error) {
 	all := make([]Event, 0)
 	err := s.Collection.Find(nil).All(&all)
-	return &all, err
+	return all, err
 }
 
 func (s *Service) GetByName(name string) (*Event, error) {

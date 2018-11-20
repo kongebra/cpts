@@ -21,7 +21,7 @@ func Test_EventService(t *testing.T) {
 	}
 
 	defer func() {
-		session.DropDatabase(DATABASE)
+		//session.DropDatabase(DATABASE)
 		session.Close()
 	}()
 
