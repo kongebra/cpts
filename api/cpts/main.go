@@ -1,12 +1,14 @@
 package cpts
 
 import (
+	"bytes"
+	"encoding/json"
 	"fmt"
-	"github.com/kongebra/cpts/api/mongo"
-	"github.com/kongebra/cpts/api/ticket"
-	"log"
 	"net/http"
 	"time"
+
+	"github.com/kongebra/cpts/api/mongo"
+	"github.com/kongebra/cpts/api/ticket"
 
 	"github.com/gorilla/mux"
 	"github.com/kongebra/cpts/api/event"
@@ -16,14 +18,14 @@ import (
 )
 
 type CPTS struct {
-	Users    []user.User `json:"users"`
-	Events   []event.Event
-	Webhooks []event.Webhook
-	Router   *mux.Router
-	Session  *mongo.Session
-	EventService *event.Service
+	Users         []user.User `json:"users"`
+	Events        []event.Event
+	Webhooks      []event.Webhook
+	Router        *mux.Router
+	Session       *mongo.Session
+	EventService  *event.Service
 	TicketService *ticket.Service
-	UserService *user.Service
+	UserService   *user.Service
 }
 
 func (api *CPTS) Init() {
@@ -32,7 +34,7 @@ func (api *CPTS) Init() {
 	api.registerRoutes()
 
 	var err error
-	api.Session, err = mongo.NewSession("localhost:27017")
+	api.Session, err = mongo.NewSession("ds143532.mlab.com:43532")
 
 	if err != nil {
 		panic(err)
@@ -47,31 +49,12 @@ func (api *CPTS) AddUser(u user.User) {
 
 func (api *CPTS) registerRoutes() {
 
-	api.Router.HandleFunc("/api/event/new", func(w http.ResponseWriter, r *http.Request) {
-		event := event.Event{
-			Id: bson.NewObjectId(),
-			Name: r.FormValue("name"),
-			Description: r.FormValue("description"),
-			Date: event.TimeInterval{
-				Start: r.FormValue("date_start"),
-				End: r.FormValue("date_end"),
-			},
-		}
-
-		err := api.EventService.Create(&event)
-
-		if err != nil {
-			log.Fatal("Could not create event")
-		}
-	}).Methods("POST")
-
 	api.Router.HandleFunc("/api", func(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, "hei")
 	})
 
-	/*
 	api.Router.HandleFunc("/api/event", func(w http.ResponseWriter, r *http.Request) {
-		evt, err := event.Create(w, r)
+		evt, err := event.AddEventHandler(w, r, api.EventService)
 		if err == nil {
 			api.Events = append(api.Events, evt)
 
@@ -92,7 +75,6 @@ func (api *CPTS) registerRoutes() {
 		}
 	}).Methods("POST")
 
-	*/
 	api.Router.HandleFunc("/api/event/webhooks", func(w http.ResponseWriter, r *http.Request) {
 		wh, err := event.RegisterWebhook(w, r)
 		if err == nil {

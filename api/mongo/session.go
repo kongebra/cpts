@@ -1,17 +1,25 @@
 package mongo
 
-import "gopkg.in/mgo.v2"
+import (
+	"time"
+
+	"gopkg.in/mgo.v2"
+)
 
 type Session struct {
 	session *mgo.Session
 }
 
 func NewSession(url string) (*Session, error) {
-	session, err := mgo.Dial("localhost:27017")
-
-	if err != nil {
-		return nil, err
+	dialInfo := &mgo.DialInfo{
+		Addrs:    []string{url},
+		Database: "cpts",
+		Username: "test12",
+		Password: "test12",
+		Timeout:  60 * time.Second,
 	}
+
+	session, err := mgo.DialWithInfo(dialInfo)
 
 	return &Session{session}, err
 }

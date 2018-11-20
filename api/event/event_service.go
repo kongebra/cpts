@@ -37,4 +37,3 @@ func (s *Service) GetById(id bson.ObjectId) (*Event, error) {
 	err := s.Collection.Find(bson.M{"_id": id}).One(&event)
 	return &event, err
 }
-
