@@ -1,15 +1,16 @@
 package event_test
 
 import (
+	"testing"
+
 	"github.com/kongebra/cpts/api/event"
 	"github.com/kongebra/cpts/api/mongo"
 	"gopkg.in/mgo.v2/bson"
-	"testing"
 )
 
 const (
-	URL = "localhost:27017"
-	DATABASE = "cpts_test"
+	URL        = "localhost:27017"
+	DATABASE   = "cpts_test"
 	COLLECTION = "event"
 )
 
@@ -32,9 +33,9 @@ func Test_EventService(t *testing.T) {
 	testDate := event.TimeInterval{Start: "2019-03-11T16:00:00Z", End: "2019-03-13T12:00:00Z"}
 
 	e := event.Event{
-		Name: testName,
+		Name:        testName,
 		Description: testDesc,
-		Date: testDate,
+		Date:        testDate,
 	}
 
 	err = eventService.Create(&e)
@@ -76,9 +77,9 @@ func Test_EventService_GetByName(t *testing.T) {
 	testDate := event.TimeInterval{Start: "2019-03-11T16:00:00Z", End: "2019-03-13T12:00:00Z"}
 
 	e := event.Event{
-		Name: testName,
+		Name:        testName,
 		Description: testDesc,
-		Date: testDate,
+		Date:        testDate,
 	}
 
 	err = eventService.Create(&e)
@@ -130,10 +131,10 @@ func Test_EventService_GetById(t *testing.T) {
 	testDate := event.TimeInterval{Start: "2019-03-11T16:00:00Z", End: "2019-03-13T12:00:00Z"}
 
 	e := event.Event{
-		Id: testId,
-		Name: testName,
+		ID:          testId,
+		Name:        testName,
 		Description: testDesc,
-		Date: testDate,
+		Date:        testDate,
 	}
 
 	err = eventService.Create(&e)
@@ -148,8 +149,8 @@ func Test_EventService_GetById(t *testing.T) {
 		t.Errorf("Unable to find event: %s", err)
 	}
 
-	if ev.Id != testId {
-		t.Errorf("Incorrect ID. Expected: %s, Got: %s", testId, ev.Id)
+	if ev.ID != testId {
+		t.Errorf("Incorrect ID. Expected: %s, Got: %s", testId, ev.ID)
 	}
 
 	if ev.Name != testName {

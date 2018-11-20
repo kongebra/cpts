@@ -58,6 +58,5 @@ func (s *Service) GetById(id bson.ObjectId) (*Event, error) {
 Update, updates the information within the event in the database
  */
 func (s *Service) Update(event *Event) error {
-	return s.Collection.Update(bson.M{"_id": event.Id}, event)
+	return s.Collection.Update(bson.M{"_id": event.ID}, event)
 }
-
