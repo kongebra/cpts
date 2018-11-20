@@ -1,17 +1,15 @@
 package main
 
 import (
-	"github.com/gorilla/mux"
-	"github.com/kongebra/cpts/api/cpts"
-	"github.com/kongebra/cpts/api/util"
 	"log"
 	"net/http"
+
+	"github.com/kongebra/cpts/api/cpts"
 )
 
 func main() {
-	router := mux.NewRouter().StrictSlash(true)
+	app := cpts.CPTS{}
+	app.Init()
 
-	cpts.RouterManager(router)
-
-	log.Fatal(http.ListenAndServe(util.GetPort(), router))
+	log.Fatal(http.ListenAndServe(":8080", app.Router))
 }
