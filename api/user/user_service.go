@@ -36,7 +36,7 @@ GetAll returns a slice with all the users.
  */
 func (s *Service) GetAll() ([]User, error) {
 	all := make([]User, 0)
-	err := s.Collection.Find(nil).All(&all)
+	err := s.Collection.Find(bson.M{}).All(&all)
 	return all, err
 }
 

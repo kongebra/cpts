@@ -4,6 +4,7 @@ import (
 	"bytes"
 	"encoding/json"
 	"fmt"
+	"log"
 	"net/http"
 	"time"
 
@@ -34,24 +35,18 @@ func (api *CPTS) Init() {
 	api.registerRoutes()
 
 	var err error
-	api.Session, err = mongo.NewSession("ds143532.mlab.com:43532")
+	api.Session, err = mongo.NewSession("localhost:27017")
 
 	if err != nil {
 		panic(err)
 	}
 
 	api.EventService = event.NewEventService(api.Session, "cpts", "event")
-}
-
-func (api *CPTS) AddUser(u user.User) {
-	api.Users = append(api.Users, u)
+	api.UserService = user.NewUserService(api.Session, "cpts", "user")
+	api.TicketService = ticket.NewTicketService(api.Session, "cpts", "ticket")
 }
 
 func (api *CPTS) registerRoutes() {
-
-	api.Router.HandleFunc("/api", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "hei")
-	})
 
 	api.Router.HandleFunc("/api/event", func(w http.ResponseWriter, r *http.Request) {
 		evt, err := event.AddEventHandler(w, r, api.EventService)
@@ -75,12 +70,121 @@ func (api *CPTS) registerRoutes() {
 		}
 	}).Methods("POST")
 
+	api.Router.HandleFunc("/api/event", func(w http.ResponseWriter, r *http.Request) {
+		events, err := api.EventService.GetAll()
+
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		json.NewEncoder(w).Encode(events)
+	}).Methods("GET")
+
 	api.Router.HandleFunc("/api/event/webhooks", func(w http.ResponseWriter, r *http.Request) {
 		wh, err := event.RegisterWebhook(w, r)
 		if err == nil {
 			api.Webhooks = append(api.Webhooks, wh)
 		}
 	}).Methods("POST")
+
+	api.Router.HandleFunc("/api/ticket", func(w http.ResponseWriter, r *http.Request) {
+		tickets, err := api.TicketService.GetAll()
+
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		json.NewEncoder(w).Encode(tickets)
+	}).Methods("GET")
+
+	api.Router.HandleFunc("/api/ticket", func(w http.ResponseWriter, r *http.Request) {
+		t := ticket.Ticket{
+			Id: bson.NewObjectId(),
+			Event: bson.ObjectIdHex(r.FormValue("event")),
+			Scanned: false,
+		}
+
+		u, err := api.UserService.GetByID(bson.ObjectIdHex(r.FormValue("user")))
+
+		if err != nil {
+			log.Fatal(err)
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
+		}
+
+		e, err := api.EventService.GetById(bson.ObjectIdHex(r.FormValue("event")))
+
+		if err != nil {
+			log.Fatal(err)
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
+		}
+
+		e.Participants = append(e.Participants, t.Id)
+		err = api.EventService.Update(e)
+
+		if err != nil {
+			log.Fatal(err)
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
+		}
+
+		u.Tickets = append(u.Tickets, t.Id)
+		err = api.UserService.Update(u)
+
+		if err != nil {
+			log.Fatal(err)
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
+		}
+
+		err = api.TicketService.Create(&t)
+
+		if err != nil {
+			log.Fatal(err)
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
+		}
+
+		fmt.Fprint(w, t.Id)
+	}).Methods("POST")
+
+	api.Router.HandleFunc("/api/user", func(w http.ResponseWriter, r *http.Request) {
+		u := user.User{
+			Id: bson.NewObjectId(),
+			Username: r.FormValue("username"),
+			Email: r.FormValue("email"),
+			Password: r.FormValue("password"),
+		}
+
+		err := api.UserService.Create(&u)
+
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
+		}
+
+		fmt.Fprint(w, u.Id)
+	}).Methods("POST")
+
+	api.Router.HandleFunc("/api/user", func(w http.ResponseWriter, r *http.Request) {
+		users, err := api.UserService.GetAll()
+
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		json.NewEncoder(w).Encode(users)
+	}).Methods("GET")
 
 }
 

@@ -47,7 +47,7 @@ func Test_UserService(t *testing.T) {
 	var events []event.Event
 	events, err = eventService.GetAll()
 
-	testEvent := events[0].Id
+	testEvent := events[0].ID
 	testScan := false
 
 	tick := ticket.Ticket{
@@ -112,7 +112,7 @@ func Test_TicketService_GetByEventId(t *testing.T) {
 	var events []event.Event
 	events, err = eventService.GetAll()
 
-	testEvent := events[0].Id
+	testEvent := events[0].ID
 
 	if len(events) < 1 {
 		e := event.Event{
@@ -125,9 +125,9 @@ func Test_TicketService_GetByEventId(t *testing.T) {
 		}
 
 		eventService.Create(&e)
-		testEvent = e.Id
+		testEvent = e.ID
 	} else {
-		testEvent = events[0].Id
+		testEvent = events[0].ID
 	}
 
 	for i := 0; i < 5; i++ {

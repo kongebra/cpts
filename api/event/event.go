@@ -3,7 +3,6 @@ package event
 import (
 	"encoding/json"
 	"errors"
-	"github.com/kongebra/cpts/api/ticket"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"net/http"

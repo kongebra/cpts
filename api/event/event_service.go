@@ -32,7 +32,7 @@ GetAll returns a slice with all the events.
  */
 func (s *Service) GetAll() ([]Event, error) {
 	all := make([]Event, 0)
-	err := s.Collection.Find(nil).All(&all)
+	err := s.Collection.Find(bson.M{}).All(&all)
 	return all, err
 }
 

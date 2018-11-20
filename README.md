@@ -17,14 +17,12 @@ docker-compose up --build -d
 
 ## Configure
 ###Docker-Compose
-```
+Configure docker-compose.yaml if another version of Golang, MongoDB or Nginx is wanted. 
 
-```
+Also the Dockerfile's in /api, /web folders.
 
 ## Testing
-```
 
-```
 
 
 ## Running
