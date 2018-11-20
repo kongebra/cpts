@@ -41,3 +41,6 @@ func (s *Service) GetByID(id bson.ObjectId) (*User, error) {
 	err := s.Collection.Find(bson.M{"_id": id}).One(&user)
 	return &user, err
 }
+func (s *Service) Update(user *User) error {
+	return s.Collection.Update(bson.M{"_id": user.Id}, user)
+}
