@@ -1,10 +1,10 @@
 package cpts
 
 import (
+	"encoding/json"
 	"fmt"
 	"github.com/kongebra/cpts/api/mongo"
 	"github.com/kongebra/cpts/api/ticket"
-	"log"
 	"net/http"
 	"time"
 
@@ -39,6 +39,7 @@ func (api *CPTS) Init() {
 	}
 
 	api.EventService = event.NewEventService(api.Session, "cpts", "event")
+	api.TicketService = ticket.NewTicketService(api.Session, "cpts", "ticket")
 }
 
 func (api *CPTS) AddUser(u user.User) {
@@ -47,7 +48,24 @@ func (api *CPTS) AddUser(u user.User) {
 
 func (api *CPTS) registerRoutes() {
 
-	api.Router.HandleFunc("/api/event/new", func(w http.ResponseWriter, r *http.Request) {
+	api.Router.HandleFunc("/api", func(w http.ResponseWriter, r *http.Request) {
+		fmt.Fprint(w, "hei")
+	})
+
+	api.Router.HandleFunc("/api/event", func(w http.ResponseWriter, r *http.Request) {
+		events, err := api.EventService.GetAll()
+
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		json.NewEncoder(w).Encode(events)
+	}).Methods("GET")
+
+	api.Router.HandleFunc("/api/event", func(w http.ResponseWriter, r *http.Request) {
 		event := event.Event{
 			Id: bson.NewObjectId(),
 			Name: r.FormValue("name"),
@@ -61,13 +79,40 @@ func (api *CPTS) registerRoutes() {
 		err := api.EventService.Create(&event)
 
 		if err != nil {
-			log.Fatal("Could not create event")
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
 		}
 	}).Methods("POST")
 
-	api.Router.HandleFunc("/api", func(w http.ResponseWriter, r *http.Request) {
-		fmt.Fprint(w, "hei")
-	})
+	api.Router.HandleFunc("/api/ticket", func(w http.ResponseWriter, r *http.Request) {
+		tickets, err := api.TicketService.GetAll()
+
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
+		}
+
+		w.Header().Set("Content-Type", "application/json")
+		w.Header().Set("Access-Control-Allow-Origin", "*")
+		json.NewEncoder(w).Encode(tickets)
+	}).Methods("GET")
+
+	api.Router.HandleFunc("/api/ticket", func(w http.ResponseWriter, r *http.Request) {
+		ticket := ticket.Ticket{
+			Id: bson.NewObjectId(),
+			Event: bson.ObjectId(r.FormValue("event")),
+			Scanned: false,
+		}
+
+		err := api.TicketService.Create(&ticket)
+
+		if err != nil {
+			http.Error(w, http.StatusText(http.StatusInternalServerError), http.StatusInternalServerError)
+			return
+		}
+
+		fmt.Fprint(w, ticket.Id)
+	}).Methods("POST")
 
 	/*
 	api.Router.HandleFunc("/api/event", func(w http.ResponseWriter, r *http.Request) {
