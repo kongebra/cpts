@@ -20,6 +20,20 @@ type Event struct {
 	Participants []bson.ObjectId `json:"participants"`
 }
 
+func Create(w http.ResponseWriter, r *http.Request, events []Event) {
+	e := Event{
+		Id: bson.NewObjectId(),
+		Name: "Some random name",
+		Description: "Some bad description",
+		Date: TimeInterval{
+			Start: "2017-11-20T00:00:00Z",
+			End: "2017-11-20T12:00:00Z",
+		},
+	}
+
+	events = append(events, e)
+}
+
 func MakeEventRoutes(r *mux.Router) {
 	r.HandleFunc("/api/events/", getEvents).Methods("GET")
 	r.HandleFunc("/api/events/{id}", getEvent).Methods("GET")
