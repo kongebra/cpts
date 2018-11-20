@@ -11,7 +11,7 @@ import (
 )
 
 type Ticket struct {
-	Id      bson.ObjectId `json:"id" bson:"id"`
+	ID      bson.ObjectId `json:"id" bson:"id"`
 	Event   bson.ObjectId `json:"event" bson:"event"`
 	Scanned bool          `json:"scanned"`
 }
@@ -20,10 +20,10 @@ func main() {
 	// MongoDB mLab connection
 
 	dialInfo := &mgo.DialInfo{
-		Addrs:    []string{"ds061938.mlab.com:61938"},
+		Addrs:    []string{"ds024778.mlab.com:24778"},
 		Database: "cpts",
-		Username: "test12",
-		Password: "test12",
+		Username: "test1",
+		Password: "test123",
 		Timeout:  60 * time.Second,
 	}
 
@@ -38,21 +38,21 @@ func main() {
 
 	r.HandleFunc("/api/ticket/", getTickets).Methods("GET")
 	r.HandleFunc("/api/ticket/{id}", getTicket).Methods("GET")
-	r.HandleFunc("/api/ticket", createTicket).Methods("POST")
+	r.HandleFunc("/api/ticket/{id}", createTicket).Methods("POST") // Event ID
 	r.HandleFunc("/api/ticket/{id}", updateTicket).Methods("PUT")
 	r.HandleFunc("/api/ticket/{id}", deleteTicket).Methods("DELETE")
 }
 
 // Get all tickets
-func (u *Ticket) getTickets(w http.ResponseWriter, r *http.Request) {
+func getTickets(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	//TODO Get all Tickets from DB
 
-	json.NewEncoder(w).Encode( /* data  */ )
+	json.NewEncoder(w).Encode( /* data  */ ) // TODO Add tickets structure here
 }
 
 // Get ticket by param "id"
-func (u *Ticket) getTicket(w http.ResponseWriter, r *http.Request) {
+func getTicket(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	params := mux.Vars(r) // Get Params
 
@@ -70,14 +70,24 @@ func (u *Ticket) getTicket(w http.ResponseWriter, r *http.Request) {
 }
 
 // Create Ticket POST Request
-func (u *Ticket) createTicket(w http.ResponseWriter, r *http.Request) {
+func createTicket(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Content-Type", "application/json")
 	var ticket Ticket
 
-	_ = json.NewDecoder(r.Body).Decode(&ticket)
+	params := mux.Vars(r)
 
-	ticket.Id = bson.NewObjectId()
+	//TODO Get all events to match id.
 
-	//TODO Add ticket to DB
+	for _, item := range events{
+		if item.ID == params["id"]{
+			//TODO Add ticket to db
+			_ = json.NewDecoder(r.Body).Decode(&ticket)
+
+			ticket.Id = bson.NewObjectId()
+			return
+		}
+	}
+	//TODO Throw error (Event not in DB)
+
 
 }
