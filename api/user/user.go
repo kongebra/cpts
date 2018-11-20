@@ -5,6 +5,7 @@ import (
 	"gopkg.in/mgo.v2/bson"
 )
 
+// User stores the details of the users
 type User struct {
 	Id bson.ObjectId `json:"id" bson:"_id,omitempty"`
 	Username string `json:"username" bson:"username"`
@@ -13,6 +14,20 @@ type User struct {
 	Tickets []bson.ObjectId `json:"tickets"`
 }
 
+/*
+User represents the main presistent data structure.
+It is of the form:
+{
+	"id": <value>,
+	"username: <value>,
+	"email": <value>,
+	"tickets": []
+}
+ */
+
+/*
+Create index's for the database, to make fields unique
+ */
 func Index() []mgo.Index {
 	var indexes []mgo.Index
 
