@@ -3,6 +3,7 @@ package event
 import (
 	"encoding/json"
 	"errors"
+	"fmt"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
 	"net/http"
@@ -71,6 +72,7 @@ func AddEventHandler(w http.ResponseWriter, r *http.Request, service *Service) (
 		evt.IMGURL = r.FormValue("image")
 	// json data
 	case "application/json":
+		fmt.Println("application/json")
 		decodeErr := json.NewDecoder(r.Body).Decode(&evt)
 		if decodeErr != nil {
 			http.Error(w, http.StatusText(http.StatusBadRequest), http.StatusBadRequest)

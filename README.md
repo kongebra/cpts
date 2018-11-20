@@ -124,3 +124,13 @@ Body:
   "user": <value>
 }
 ```
+
+### POST /api/event/webhooks
+Creates a Discord-webhook
+
+Body:
+```json
+{
+  "url": <discord-webhook-url>
+}
+```

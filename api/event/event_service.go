@@ -1,9 +1,11 @@
 package event
 
 import (
+	"fmt"
 	"github.com/kongebra/cpts/api/mongo"
 	"gopkg.in/mgo.v2"
 	"gopkg.in/mgo.v2/bson"
+	"log"
 )
 
 // Event Service deals with database functions
@@ -24,7 +26,15 @@ func NewEventService(session *mongo.Session, dbName string, collectionName strin
 Create a new event to the database.
  */
 func (s *Service) Create(e *Event) error {
-	return s.Collection.Insert(e)
+	fmt.Println(e)
+
+	err := s.Collection.Insert(e)
+
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	return err
 }
 
 /*
