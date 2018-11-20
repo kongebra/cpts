@@ -8,7 +8,7 @@
     <!-- Bootstrap CSS -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
 
-    <title>CPTS - EVENT</title>
+    <title>CPTS - EVENT - CREATE</title>
 </head>
 <body>
 
@@ -16,46 +16,45 @@
     <div class="row">
 
         <div class="col">
-            <form action="localhost:3000/api/event" method="post">
-                <h1 class="display-4">Create Event</h1>
+
+            <form action="http://localhost:3000/api/event" method="post">
+                <h1 class="display-4">
+                    Create Event
+                </h1>
+
                 <div class="form-group">
-                    <label for="">Name</label>
-                    <input type="text" class="form-control">
+                    <label for="name">Name</label>
+                    <input type="text" id="name" name="name" class="form-control" required autofocus>
                 </div>
+
                 <div class="form-group">
-                    <label for="">Description</label>
-                    <textarea name="" id="" rows="5" class="form-control"></textarea>
+                    <label for="description">Description</label>
+                    <textarea name="description" id="description" class="form-control" rows="5" required></textarea>
                 </div>
+
                 <div class="form-group">
-                    <label for="">Date</label>
                     <div class="row">
                         <div class="col">
-                            <input type="date" class="form-control">
-                            <small class="form-text text-muted">Start</small>
+                            <label for="date_start">Date Start</label>
+                            <input type="datetime-local" name="date_start" class="form-control" required>
                         </div>
                         <div class="col">
-                            <input type="date" class="form-control">
-                            <small class="form-text text-muted">End</small>
+                            <label for="date_start">Date End</label>
+                            <input type="datetime-local" name="date_end" class="form-control" required>
                         </div>
                     </div>
                 </div>
+
                 <div class="form-group">
-                    <label for="">Time</label>
-                    <div class="row">
-                        <div class="col">
-                            <input type="time" class="form-control">
-                            <small class="form-text text-muted">Start</small>
-                        </div>
-                        <div class="col">
-                            <input type="time" class="form-control">
-                            <small class="form-text text-muted">End</small>
-                        </div>
-                    </div>
+                    <label for="image">Image URL</label>
+                    <input type="url" name="image" class="form-control" required>
                 </div>
+                
                 <div class="form-group">
-                    <input type="submit" class="btn btn-outline-dark">
+                    <input type="submit" class="btn btn-outline-dark btn-block btn-lg">
                 </div>
             </form>
+
         </div>
 
     </div>

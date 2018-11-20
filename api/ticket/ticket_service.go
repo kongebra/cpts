@@ -22,7 +22,7 @@ func (s *Service) Create(t *Ticket) error {
 
 func (s *Service) GetAll() ([]Ticket, error) {
 	all := make([]Ticket, 0)
-	err := s.Collection.Find(nil).All(&all)
+	err := s.Collection.Find(bson.M{}).All(&all)
 	return all, err
 }
 
